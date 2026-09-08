@@ -1,0 +1,231 @@
+@layer base {
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+}
+
+:root {
+  --bg-desktop: #008080;
+  --win-bg: #c0c0c0;
+  --win-border-light: #ffffff;
+  --win-border-dark: #808080;
+  --win-border-shadow: #000000;
+  --title-active-from: #000080;
+  --title-active-to: #1084d0;
+  --title-text: #ffffff;
+  --btn-bg: #c0c0c0;
+  --btn-text: #000000;
+  --accent-color: #000080;
+  --font-retro: 'VT323', monospace;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background-color: #0f1115;
+  color: #1a1a1a;
+  font-family: var(--font-sans);
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Theme variations */
+.theme-classic {
+  --bg-desktop: #008080;
+  --win-bg: #c0c0c0;
+  --win-border-light: #ffffff;
+  --win-border-dark: #808080;
+  --win-border-shadow: #000000;
+  --title-active-from: #000080;
+  --title-active-to: #1084d0;
+  --title-text: #ffffff;
+  --btn-bg: #c0c0c0;
+  --btn-text: #000000;
+  --accent-color: #000080;
+}
+
+.theme-cyberpunk {
+  --bg-desktop: #070b12;
+  --win-bg: #0f172a;
+  --win-border-light: #00ff66;
+  --win-border-dark: #005522;
+  --win-border-shadow: #002211;
+  --title-active-from: #00ff66;
+  --title-active-to: #009944;
+  --title-text: #000000;
+  --btn-bg: #1e293b;
+  --btn-text: #00ff66;
+  --accent-color: #00ff66;
+  color: #e2e8f0;
+}
+
+.theme-amber {
+  --bg-desktop: #120d02;
+  --win-bg: #1e1505;
+  --win-border-light: #ffb000;
+  --win-border-dark: #805500;
+  --win-border-shadow: #402b00;
+  --title-active-from: #ffb000;
+  --title-active-to: #cc8800;
+  --title-text: #000000;
+  --btn-bg: #2d2008;
+  --btn-text: #ffb000;
+  --accent-color: #ffb000;
+  color: #fed7aa;
+}
+
+.theme-vaporwave {
+  --bg-desktop: #2b1055;
+  --win-bg: #1f1435;
+  --win-border-light: #ff71ce;
+  --win-border-dark: #b967ff;
+  --win-border-shadow: #01cdfe;
+  --title-active-from: #ff71ce;
+  --title-active-to: #01cdfe;
+  --title-text: #ffffff;
+  --btn-bg: #2e1a47;
+  --btn-text: #ff71ce;
+  --accent-color: #01cdfe;
+  color: #f1f5f9;
+}
+
+/* 3D Canvas wrapper */
+.canvas-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 1;
+  background: radial-gradient(circle at center, #1b2028 0%, #090a0d 100%);
+}
+
+/* Retro Win98 3D Bevel borders */
+.win98-box-outset {
+  background: var(--win-bg);
+  box-shadow: 
+    inset 1.5px 1.5px 0px var(--win-border-light),
+    inset -1.5px -1.5px 0px var(--win-border-shadow),
+    inset 2.5px 2.5px 0px #dfdfdf,
+    inset -2.5px -2.5px 0px var(--win-border-dark);
+}
+
+.win98-box-inset {
+  background: #ffffff;
+  box-shadow: 
+    inset 1.5px 1.5px 0px var(--win-border-shadow),
+    inset -1.5px -1.5px 0px var(--win-border-light),
+    inset 2.5px 2.5px 0px var(--win-border-dark),
+    inset -2.5px -2.5px 0px #dfdfdf;
+}
+
+.theme-cyberpunk .win98-box-inset,
+.theme-amber .win98-box-inset,
+.theme-vaporwave .win98-box-inset {
+  background: rgba(0, 0, 0, 0.6);
+  color: inherit;
+}
+
+.win98-btn {
+  background: var(--btn-bg);
+  color: var(--btn-text);
+  border: none;
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  box-shadow: 
+    inset 1.5px 1.5px 0px var(--win-border-light),
+    inset -1.5px -1.5px 0px var(--win-border-shadow),
+    inset 2px 2px 0px #dfdfdf,
+    inset -2px -2px 0px var(--win-border-dark);
+  transition: filter 0.1s;
+}
+
+.win98-btn:hover {
+  filter: brightness(1.06);
+}
+
+.win98-btn:active {
+  box-shadow: 
+    inset 1.5px 1.5px 0px var(--win-border-shadow),
+    inset -1.5px -1.5px 0px var(--win-border-light),
+    inset 2px 2px 0px var(--win-border-dark),
+    inset -2px -2px 0px #dfdfdf;
+  padding: 5px 9px 3px 11px;
+}
+
+/* CRT Screen simulation */
+.crt-screen-overlay {
+  position: relative;
+  overflow: hidden;
+}
+
+.crt-scanlines::before {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 999;
+  pointer-events: none;
+  opacity: 0.65;
+}
+
+.crt-screen-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: radial-gradient(circle at center, transparent 65%, rgba(0,0,0,0.4) 100%);
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 14px;
+  height: 14px;
+}
+
+::-webkit-scrollbar-track {
+  background: #d8d8d8;
+  box-shadow: inset 1px 1px 0px #808080;
+}
+
+.theme-cyberpunk ::-webkit-scrollbar-track,
+.theme-amber ::-webkit-scrollbar-track,
+.theme-vaporwave ::-webkit-scrollbar-track {
+  background: #111827;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--win-bg);
+  box-shadow: 
+    inset 1.5px 1.5px 0px var(--win-border-light),
+    inset -1.5px -1.5px 0px var(--win-border-shadow),
+    inset 2px 2px 0px #dfdfdf,
+    inset -2px -2px 0px var(--win-border-dark);
+}
+
+/* Monospace Terminal styling */
+.terminal-font {
+  font-family: var(--font-mono);
+}
+
+.retro-font {
+  font-family: var(--font-retro);
+}
