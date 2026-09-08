@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import type { AppId, CameraViewMode, OSTheme, WindowState } from '../types/portfolio';
 import { sound } from '../utils/sound';
-import { soundCloudManager } from '../utils/soundCloudManager';
+import { audioManager } from '../utils/audioManager';
 
-soundCloudManager.registerStateCallback((playing) => {
+audioManager.registerStateCallback((playing) => {
   globalState.isLofiPlaying = playing;
   notify();
 });
@@ -241,7 +241,7 @@ export const portfolioActions = {
 
   toggleLofi() {
     sound.playClick();
-    const nextState = soundCloudManager.toggle();
+    const nextState = audioManager.toggle();
     globalState.isLofiPlaying = nextState;
     notify();
   }

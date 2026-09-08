@@ -2,8 +2,6 @@ import { SceneCanvas } from './components/3d/SceneCanvas';
 import { HUDOverlay } from './components/ui/HUDOverlay';
 import { DirectOSModal } from './components/ui/DirectOSModal';
 import { BiosStartup } from './components/ui/BiosStartup';
-import { SoundCloudHost } from './components/audio/SoundCloudHost';
-
 export function App() {
   return (
     <main style={{ width: '100vw', height: '100vh', position: 'relative', overflow: 'hidden' }}>
@@ -18,9 +16,6 @@ export function App() {
 
       {/* Fallback Direct Fullscreen Virtual OS (for Mobile or direct inspection) */}
       <DirectOSModal />
-
-      {/* Persistent Background SoundCloud Widget Host */}
-      <SoundCloudHost />
     </main>
   );
 }
