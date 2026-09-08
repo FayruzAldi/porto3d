@@ -13,6 +13,7 @@ export const SettingsApp = () => {
     setSoundEnabled,
     useCustomModel,
     setUseCustomModel,
+    setCustomModelUrl,
     setCameraMode
   } = usePortfolioStore();
 
@@ -80,14 +81,54 @@ export const SettingsApp = () => {
             />
           </label>
 
-          <label style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', fontSize: '12px', cursor: 'pointer' }}>
-            <span>Load Custom Model (.glb di /models/scene.glb):</span>
-            <input 
-              type="checkbox" 
-              checked={useCustomModel} 
-              onChange={(e) => setUseCustomModel(e.target.checked)}
-            />
-          </label>
+          <div style={{ borderTop: '1px solid #cbd5e1', paddingTop: '8px', marginTop: '4px' }}>
+            <div style={{ fontSize: '11px', fontWeight: 700, marginBottom: '6px', color: '#1e293b' }}>
+              Pilihan Model Ruangan 3D:
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', cursor: 'pointer' }}>
+                <input 
+                  type="radio" 
+                  name="modelSource" 
+                  checked={!useCustomModel} 
+                  onChange={() => setUseCustomModel(false)}
+                />
+                <span>Workstation Retro (File GLB: <code>retrokomputer.glb</code>)</span>
+              </label>
+
+              <label style={{ display: 'flex', alignItems: 'center', gap: '6px', fontSize: '11px', cursor: 'pointer' }}>
+                <input 
+                  type="radio" 
+                  name="modelSource" 
+                  checked={useCustomModel} 
+                  onChange={() => setUseCustomModel(true)}
+                />
+                <span>Procedural Computer (Mode Google AI Studio - Tanpa File GLB)</span>
+              </label>
+            </div>
+
+            <div style={{ marginTop: '8px', padding: '6px', background: '#f8fafc', border: '1px dashed #94a3b8', borderRadius: '3px' }}>
+              <label style={{ fontSize: '10px', display: 'block', fontWeight: 600, marginBottom: '4px' }}>
+                📁 Muat File .glb dari Komputer Anda:
+              </label>
+              <input 
+                type="file" 
+                accept=".glb,.gltf" 
+                onChange={(e) => {
+                  const file = e.target.files?.[0];
+                  if (file) {
+                    const blobUrl = URL.createObjectURL(file);
+                    setUseCustomModel(false);
+                    setCustomModelUrl(blobUrl);
+                  }
+                }}
+                style={{ fontSize: '10px', width: '100%' }}
+              />
+              <span style={{ fontSize: '9px', color: '#64748b', display: 'block', marginTop: '2px' }}>
+                Pilih file <code>retrokomputer.glb</code> langsung dari penyimpanan lokal.
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 

@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import { usePortfolioStore } from '../../stores/portfolioStore';
 
 export const CameraController: React.FC = () => {
-  const { cameraMode } = usePortfolioStore();
+  const { cameraMode, useCustomModel } = usePortfolioStore();
   const { camera } = useThree();
   const controlsRef = useRef<any>(null);
 
@@ -14,9 +14,13 @@ export const CameraController: React.FC = () => {
   const roomCamPos = new THREE.Vector3(2.0, 1.72, 1.10);
   const roomCamTarget = new THREE.Vector3(-0.15, 0.78, -0.25);
 
-  // Screen View: Positioned squarely in front of CRT monitor face, aligned with normal vector
-  const screenCamPos = new THREE.Vector3(0.125, 1.180, -0.512);
-  const screenCamTarget = new THREE.Vector3(-0.329, 1.180, -0.637);
+  // Screen View: Positioned squarely in front of CRT monitor face
+  const screenCamPos = useCustomModel 
+    ? new THREE.Vector3(0, 1.28, 1.05)
+    : new THREE.Vector3(0.125, 1.180, -0.512);
+  const screenCamTarget = useCustomModel
+    ? new THREE.Vector3(0, 1.28, 0)
+    : new THREE.Vector3(-0.329, 1.180, -0.637);
 
   const currentTarget = useRef(new THREE.Vector3(-0.05, 0.85, -0.20));
 
