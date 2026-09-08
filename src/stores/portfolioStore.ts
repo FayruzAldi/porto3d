@@ -100,6 +100,7 @@ interface GlobalState {
   scanlinesEnabled: boolean;
   isDirectOSFullscreen: boolean;
   useCustomModel: boolean;
+  customModelUrl: string | null;
   isLofiPlaying: boolean;
 }
 
@@ -112,6 +113,7 @@ let globalState: GlobalState = {
   scanlinesEnabled: true,
   isDirectOSFullscreen: false,
   useCustomModel: false,
+  customModelUrl: null,
   isLofiPlaying: false,
 };
 
@@ -236,6 +238,12 @@ export const portfolioActions = {
   setUseCustomModel(val: boolean) {
     sound.playClick();
     globalState.useCustomModel = val;
+    notify();
+  },
+
+  setCustomModelUrl(url: string | null) {
+    sound.playClick();
+    globalState.customModelUrl = url;
     notify();
   },
 

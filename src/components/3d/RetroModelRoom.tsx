@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { useGLTF, Html } from '@react-three/drei';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
@@ -6,6 +6,7 @@ import { usePortfolioStore } from '../../stores/portfolioStore';
 import { sound } from '../../utils/sound';
 import { VirtualOS } from '../os/VirtualOS';
 import { ErrorBoundary } from '../ui/ErrorBoundary';
+import { CRTMonitor } from './CRTMonitor';
 
 // Glowing Animated White Outer Ring over Monitor Screen
 const MonitorHighlightRing = ({ onClick }: { onClick: (e: any) => void }) => {
@@ -14,7 +15,6 @@ const MonitorHighlightRing = ({ onClick }: { onClick: (e: any) => void }) => {
 
   useFrame((state) => {
     if (ringRef.current) {
-      // Gentle breathing pulsation
       const t = state.clock.getElapsedTime();
       const scale = 1 + Math.sin(t * 2.8) * 0.012;
       ringRef.current.scale.set(scale, scale, 1);
@@ -106,15 +106,17 @@ const MonitorHighlightRing = ({ onClick }: { onClick: (e: any) => void }) => {
   );
 };
 
-export const RetroModelRoom = () => {
-  const { scene } = useGLTF('/models/retrokomputer.glb');
-  const { cameraMode, setCameraMode } = usePortfolioStore();
+// GLTF Realistic Model Workstation
+const GLTFRetroRoom = () => {
+  const { customModelUrl, cameraMode, setCameraMode } = usePortfolioStore();
+  const modelPath = customModelUrl || '/models/retrokomputer.glb';
+  const { scene } = useGLTF(modelPath);
   const groupRef = useRef<THREE.Group>(null);
 
   const isRoomView = cameraMode === 'room';
 
-  const handleEnterScreen = (e: any) => {
-    e.stopPropagation();
+  const handleEnterScreen = (e?: any) => {
+    if (e && e.stopPropagation) e.stopPropagation();
     if (isRoomView) {
       document.body.style.cursor = 'auto';
       sound.playClick();
@@ -145,7 +147,7 @@ export const RetroModelRoom = () => {
           color="#38bdf8"
         />
 
-        {/* Embedded Virtual OS Screen on CRT Face, snugly fitted into monitor bezel */}
+        {/* Embedded Virtual OS Screen on CRT Face, fitted into monitor bezel */}
         <group position={[0.154, 0.269, 0]} rotation={[0, Math.PI / 2, 0]}>
           <Html
             transform
@@ -249,6 +251,86 @@ export const RetroModelRoom = () => {
         color="#ffe2b0"
       />
     </group>
+  );
+};
+
+// Procedural Retro Room (Zero external assets required, 100% Google AI Studio compatible)
+const ProceduralRetroRoom = () => {
+  return (
+    <group position={[0, 0, 0]}>
+      {/* Procedural Desk Table */}
+      <mesh position={[0, 0.42, 0]} castShadow receiveShadow>
+        <boxGeometry args={[2.2, 0.08, 1.3]} />
+        <meshStandardMaterial color="#4a3728" roughness={0.7} />
+      </mesh>
+      {/* Table Legs */}
+      <mesh position={[-1.0, 0.0, -0.6]} castShadow>
+        <boxGeometry args={[0.08, 0.84, 0.08]} />
+        <meshStandardMaterial color="#2d2218" />
+      </mesh>
+      <mesh position={[0.95, 0.0, -0.6]} castShadow>
+        <boxGeometry args={[0.08, 0.84, 0.08]} />
+        <meshStandardMaterial color="#2d2218" />
+      </mesh>
+      <mesh position={[-1.0, 0.0, 0.4]} castShadow>
+        <boxGeometry args={[0.08, 0.84, 0.08]} />
+        <meshStandardMaterial color="#2d2218" />
+      </mesh>
+      <mesh position={[0.95, 0.0, 0.4]} castShadow>
+        <boxGeometry args={[0.08, 0.84, 0.08]} />
+        <meshStandardMaterial color="#2d2218" />
+      </mesh>
+
+      {/* Procedural CRT Monitor with Integrated VirtualOS Screen */}
+      <CRTMonitor />
+
+      {/* Ambient Fill Light for Procedural Room */}
+      <spotLight
+        position={[0.8, 2.0, 1.0]}
+        target-position={[0, 0.8, 0]}
+        intensity={2.5}
+        angle={0.8}
+        color="#ffe4cc"
+        castShadow
+      />
+    </group>
+  );
+};
+
+// React Error Boundary for 3D GLTF Loading
+class ModelErrorBoundary extends React.Component<
+  { fallback: React.ReactNode; children: React.ReactNode },
+  { hasError: boolean }
+> {
+  state = { hasError: false };
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any) {
+    console.warn('GLB 3D model failed to load in this environment (e.g. Google AI Studio sandbox). Falling back to Procedural Room:', error);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return this.props.fallback;
+    }
+    return this.props.children;
+  }
+}
+
+export const RetroModelRoom = () => {
+  const { useCustomModel } = usePortfolioStore();
+
+  if (useCustomModel) {
+    return <ProceduralRetroRoom />;
+  }
+
+  return (
+    <ModelErrorBoundary fallback={<ProceduralRetroRoom />}>
+      <GLTFRetroRoom />
+    </ModelErrorBoundary>
   );
 };
 
